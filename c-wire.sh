@@ -105,9 +105,7 @@ creer_dossier() {
  
 }
 
-tri_fichier(){
-
-
+tri_fichier(){ #fonction pour trier le fichier .csv
 case "$TYPE_STATION" in
     'hvb')  grep -E "^$CENTRALE_ID;[^-]+;-;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | sed 's/-/0/g' > "./tmp/hvb_comp_input.csv" &&
             grep -E "^$CENTRALE_ID;[^-]+;-;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | sed 's/-/0/g' >> "./tmp/hvb_comp_input.csv"
@@ -165,7 +163,6 @@ creer_lvallminmax() {
         tail -n +2 "./tmp/lv_all_${CENTRALE_ID}.csv" | awk -F: '{print $0 ":" ($2 - $3)}' | sort -t ":" -k4n | (head -n 10; tail -n 10) >> "./tmp/lv_all_minmax.csv"
     fi 
 }
-
 
 # Appel des fonctions
 verifier_arguments "$@"
