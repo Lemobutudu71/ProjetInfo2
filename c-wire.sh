@@ -83,46 +83,34 @@ verifier_Executable() {
 }
 
 creer_dossier() {
-    dossier_tmp="tmp"
-    dossier_graph="graphs"
-    dossier_tests="test"
-     # Vérifier si le dossier temporaire existe, sinon le créer. Sinon, le vider
-    if [ ! -d "$dossier_tmp" ] ; then
-        mkdir "$dossier_tmp"
-    else
-        rm -rf "${dossier_tmp:?}/"*
-    fi
-    echo "Dossier temporaire créé ou vidé."
-    # Vérification du dossier de graphes et création si nécessaire
-    if [ ! -d "$dossier_graph" ] ; then
-        mkdir "$dossier_graph"
-    fi
-    # Vérification du dossier test et création si nécessaire
-    if [ ! -d "$dossier_tests" ] ; then
-        mkdir "$dossier_tests"
-    fi
- 
- 
+	rm -rf "./tmp/" "./graphs/"
+	for dossier in "tmp" "test" "graphs"; do
+    	# Vérifier si le dossier temporaire existe, sinon le créer. Sinon, le vider
+	    	if [ ! -d "$dossier" ] ; then
+	    	    mkdir "$dossier"
+	    	fi
+	    done
+    echo "Tmp, test et graphs sont créés" 
 }
 
 tri_fichier(){ #fonction pour trier le fichier .csv
 case "$TYPE_STATION" in
-    'hvb')  grep -E "^$CENTRALE_ID;[^-]+;-;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | sed 's/-/0/g' > "./tmp/hvb_comp_input.csv" &&
-            grep -E "^$CENTRALE_ID;[^-]+;-;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | sed 's/-/0/g' >> "./tmp/hvb_comp_input.csv"
+    'hvb')  grep -E "^$CENTRALE_ID;[^-]+;-;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | tr "-" "0" > "./tmp/hvb_comp_input.csv" &&
+            grep -E "^$CENTRALE_ID;[^-]+;-;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | tr "-" "0" >> "./tmp/hvb_comp_input.csv"
     ;;
-    'hva') grep -E "^$CENTRALE_ID;[^-]+;[^-]+;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f3,7,8 | sed 's/-/0/g' > "./tmp/hva_comp_input.csv" &&
-           grep -E "^$CENTRALE_ID;-;[^-]+;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f3,7,8 | sed 's/-/0/g' >> "./tmp/hva_comp_input.csv"
+    'hva') grep -E "^$CENTRALE_ID;[^-]+;[^-]+;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f3,7,8 | tr "-" "0" > "./tmp/hva_comp_input.csv" &&
+           grep -E "^$CENTRALE_ID;-;[^-]+;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f3,7,8 | tr "-" "0" >> "./tmp/hva_comp_input.csv"
     ;;
     'lv') case "$TYPE_CONSOMMATEUR" in 
-            'comp') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' > "./tmp/lv_comp_input.csv" &&
-                    grep -E "$CENTRALE_ID;-;-;[^-]+;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' >> "./tmp/lv_comp_input.csv"
+            'comp') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" > "./tmp/lv_comp_input.csv" &&
+                    grep -E "$CENTRALE_ID;-;-;[^-]+;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" >> "./tmp/lv_comp_input.csv"
             ;;
-            'indiv') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' > "./tmp/lv_indiv_input.csv" &&
-                    grep -E "$CENTRALE_ID;-;-;[^-]+;-;[^-]+;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' >> "./tmp/lv_indiv_input.csv"
+            'indiv') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" > "./tmp/lv_indiv_input.csv" &&
+                    grep -E "$CENTRALE_ID;-;-;[^-]+;-;[^-]+;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" >> "./tmp/lv_indiv_input.csv"
             ;;
-            'all') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' > "./tmp/lv_all_input.csv" &&
-            grep -E "$CENTRALE_ID;-;-;[^-]+;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' >> "./tmp/lv_all_input.csv" &&
-            grep -E "$CENTRALE_ID;-;-;[^-]+;-;[^-]+;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | sed 's/-/0/g' >> "./tmp/lv_all_input.csv"
+            'all') grep -E "$CENTRALE_ID;-;[^-]+;[^-]+;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" > "./tmp/lv_all_input.csv" &&
+            grep -E "$CENTRALE_ID;-;-;[^-]+;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" >> "./tmp/lv_all_input.csv" &&
+            grep -E "$CENTRALE_ID;-;-;[^-]+;-;[^-]+;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f4,7,8 | tr "-" "0" >> "./tmp/lv_all_input.csv"
 
             ;;
             *) echo "Erreur d'argument lv"
@@ -139,13 +127,13 @@ esac
 executer_programme(){ #fonction pour envoyer le fichier input.csv dans le programme c et recupérer le fichier de sortie
     if [ ${CENTRALE_ID} = "[^-]+" ]; then
         (./codeC/exec < ./tmp/${TYPE_STATION}_${TYPE_CONSOMMATEUR}_input.csv) \
-            | sort -t ":" -k3,3n \
+            | sort -t ":" -k2,2n \
             | sed "1s/^/Station: Capacite: Consomation ${TYPE_CONSOMMATEUR}\n/" \
             > ./tmp/${TYPE_STATION}_${TYPE_CONSOMMATEUR}.csv
             
     else
         (./codeC/exec < ./tmp/${TYPE_STATION}_${TYPE_CONSOMMATEUR}_input.csv) \
-            | sort -t ":" -k3,3n \
+            | sort -t ":" -k2,2n \
             | sed "1s/^/Station: Capacite: Consomation ${TYPE_CONSOMMATEUR}\n/" \
             > ./tmp/${TYPE_STATION}_${TYPE_CONSOMMATEUR}_${CENTRALE_ID}.csv
            
