@@ -21,14 +21,22 @@ Assurez-vous que les éléments suivants sont installés sur votre système :
 
 Utilisation du programme
 1.Téléchargez le dépôt git sur votre ordinateur. (Il est parfois nécessaire d’utiliser la commande unzip pour décompresser les fichiers zip )
+
 2.Placez le fichier c-wire_v25.dat dans le répertoire ‘input’ .
+
 3.Accédez au répertoire du Projet : cd ProjetInfo2 
+
 4.Mettre à jour les autorisations : chmod +x c-wire.sh  (si vous rencontrez d’autres accès refusé : chmod +x cheminDufichier/fichier )
+
 5.Exécutez le script : ./c-wire.sh input/<csv_file> <type_station> <type_consommateur> [centrale_id]
-6.Exemple d’execution : ./c-wire.sh input/c-wire_v25.dat hvb comp 
+
+6.Exemple d’execution : 
+ ./c-wire.sh input/c-wire_v25.dat hvb comp 
  ./c-wire.sh input/c-wire_v25.dat hva comp 
  ./c-wire.sh input/c-wire_v25.dat lv all
+ 
 7.Les fichiers seront disponibles dans le répertoires tmp.
+
 Description des arguments :
 FICHIER : Nom du fichier .dat contenant les données.
 STATION :
