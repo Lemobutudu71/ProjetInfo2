@@ -1,7 +1,10 @@
 #!/bin/bash
 
+
+# Boucle pour analyser les arguments passés au script
 for arg in "$@"; do
     if [ "$arg" == "-h" ]; then
+    # Affiche le message d'aide si l'option -h est utilisée
     echo "Usage: $0[FICHIER][STATION][CONSOMMATEUR][ID CENTRALE][OPTIONS]" 
     echo "Fichier :"
     echo "   Fichier .dat existant requis"
@@ -19,6 +22,8 @@ for arg in "$@"; do
   fi
 done
 
+
+# Fonction pour vérifier les arguments passés au script
 verifier_arguments() {
     echo "Arguments reçus : $@"
 
@@ -37,19 +42,19 @@ verifier_arguments() {
         echo "Temps : 0 sec"
         exit 1
     fi
-
+     # Vérification que la station est valide
     if [ "$2" != "hva" ] && [ "$2" != "hvb" ] && [ "$2" != "lv" ]; then
         echo "Erreur : Les stations à traiter sont : hvb ; hva ; lv"
         echo "Temps : 0 sec"
         exit 1
     fi
-
+      # Vérification que le type de consommateur est valide
     if [ "$3" != "comp" ] && [ "$3" != "indiv" ] && [ "$3" != "all" ]; then
         echo "Erreur : Les consommateurs à traiter sont : comp ; indiv ; all"
         echo "Temps : 0 sec"
         exit 1
     fi
-
+      # Vérification des combinaisons interdites
     case "$2 $3" in
         "hvb all" | "hvb indiv")
             echo "Erreur : 'hvb all' et 'hvb indiv' sont interdits."
@@ -60,7 +65,7 @@ verifier_arguments() {
             exit 1
             ;;
     esac
-
+    # Vérification de l'identifiant de centrale (si fourni)
     if ! [[ "$4" =~ ^[1-5]+$ ]] && [ -n "$4" ]; then
         echo "Erreur : Mauvais identifiant de centrale."
         echo "Temps : 0 sec"
@@ -74,6 +79,7 @@ TYPE_STATION=$2     # Type de station (hvb, hva, lv)
 TYPE_CONSOMMATEUR=$3  # Type de consommateur (comp, indiv, all)
 CENTRALE_ID=${4:-"[^-]+"} #Identifiant centrale
 
+# Fonction pour vérifier si l'exécutable C est présent
 verifier_Executable() {
     if [ ! -f ./codeC/exec ]; then  # Vérifie si l'exécutable 'exec' existe
         echo "Compilation en cours..."
@@ -82,6 +88,7 @@ verifier_Executable() {
     echo "Programme C compilé sans erreurs."
 }
 
+# Fonction pour créer et nettoyer les dossiers nécessaires
 creer_dossier() {
 	rm -rf "./tmp/" "./graphs/"
 	for dossier in "tmp" "test" "graphs"; do
@@ -93,7 +100,8 @@ creer_dossier() {
     echo "Tmp, test et graphs sont créés" 
 }
 
-tri_fichier(){ #fonction pour trier le fichier .csv
+#fonction pour trier le fichier .csv
+tri_fichier(){ 
 case "$TYPE_STATION" in
     'hvb')  grep -E "^$CENTRALE_ID;[^-]+;-;-;-;-;[^-]+;-$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | tr "-" "0" > "./tmp/hvb_comp_input.csv" &&
             grep -E "^$CENTRALE_ID;[^-]+;-;-;[^-]+;-;-;[^-]+$" "$FICHIER_CSV" | cut -d ";" -f2,7,8 | tr "-" "0" >> "./tmp/hvb_comp_input.csv"
@@ -124,7 +132,8 @@ case "$TYPE_STATION" in
 esac
 }
 
-executer_programme(){ #fonction pour envoyer le fichier input.csv dans le programme c et recupérer le fichier de sortie
+# Fonction pour exécuter le programme C
+executer_programme(){ 
     if [ ${CENTRALE_ID} = "[^-]+" ]; then
         (./codeC/exec < ./tmp/${TYPE_STATION}_${TYPE_CONSOMMATEUR}_input.csv) \
             | sort -t ":" -k2,2n \
@@ -141,7 +150,7 @@ executer_programme(){ #fonction pour envoyer le fichier input.csv dans le progra
 }
 
 
-# function to create the top 10 and bottom 10 consumers of the LV station
+# Fonction pour générer les consommations minimum et maximum pour LV station
 creer_lvallminmax() {
     if [ ${CENTRALE_ID} = "[^-]+" ]; then
        
