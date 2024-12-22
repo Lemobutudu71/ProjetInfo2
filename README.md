@@ -2,51 +2,33 @@ Projet d’informatique : Gestion des Stations Électriques
 
 Ce projet utilise une structure de données AVL pour gérer des données relatives aux stations électriques, notamment leur capacité et leur consommation. Le projet inclut des outils pour insérer, parcourir, et exporter des données AVL.
 
-Structure du Projet
-
-- `AVL.h` : Définit la structure de l'arbre AVL et les prototypes des fonctions associées.
-- `AVL.c` : Implémente les fonctions pour manipuler l'arbre AVL (insertion, rotations, parcours, exportation).
-- `main.c` : Point d'entrée principal du programme pour lire les données d'entrée, insérer les nœuds dans l'AVL et afficher/exporter les résultats.
-- `Makefile` : Facilite la compilation du programme.
-- `c-wire.sh` : Script shell pour traiter le fichiers CSV et intégrer l'exécutable.
-
+Structure du Projet: 
+Le répertoire contient les fichiers suivants :
+-codeC/ : Répertoire contenant les fichiers C (main, AVL.c ) ainsi que le Makefile.
+- c-wire.sh : Script shell pour traiter le fichiers CSV et intégrer l'exécutable.
+-test/: Répertoire contenant les exemples d’exécution de notre application.
+-tmp/: Répertoire censé contenir les résultats lors des prochaines exécutions.
+-input / : Répertoire contenant le fichier csv à trier.
+-RAEDME.md:  C’est le fichier que vous êtes en train de lire et qui explique le fonctionnement et l’utilisation du code.
+-Rapport projet c-wire.pdf: Rapport détaillant  la répartition des tâches au sein du groupe, le planning de réalisation, et les limitations fonctionnelles de votre application 
 
 Prérequis
 
 Assurez-vous que les éléments suivants sont installés sur votre système :
-
 - `gcc` (compilateur C)
 - `make` (outil de build)
 - Bash (pour exécuter le script shell)
 
 Utilisation du programme
-Une fois le fichier ProjetInfo2 téléchargé, vous devez placer le fichier c-wire_v25.dat dans le dossier input.
-Si 
-
-Compilation
-
-Pour compiler le projet, utilisez la commande suivante :
-
-```bash
-make
-
-Utilisation
-1. Exécution du Programme C
-Pour exécuter directement le programme compilé, utilisez la commande suivante :
-./exec < fichier_entrée.dat
-
-
-Format du fichier d'entrée : Chaque ligne doit être structurée comme suit :
-identifiant;capacite;consommation
-
-Il est parfois nécessaire d’utiliser la commande unzip pour décompresser les fichiers zip :
-sudo apt install unzip
-
-2. Script Bash
-Le script script.sh est utilisé pour automatiser le traitement des fichiers CSV et l'intégration avec le programme C.
-Commande d'utilisation:
-./script.sh [FICHIER] [STATION] [CONSOMMATEUR] [ID_CENTRALE] [OPTIONS]
-
+1.Téléchargez le dépôt git sur votre ordinateur. (Il est parfois nécessaire d’utiliser la commande unzip pour décompresser les fichiers zip )
+2.Placez le fichier c-wire_v25.dat dans le répertoire ‘input’ .
+3.Accédez au répertoire du Projet : cd ProjetInfo2 
+4.Mettre à jour les autorisations : chmod +x c-wire.sh  (si vous rencontrez d’autres accès refusé : chmod +x cheminDufichier/fichier )
+5.Exécutez le script : ./c-wire.sh input/<csv_file> <type_station> <type_consommateur> [centrale_id]
+6.Exemple d’execution : ./c-wire.sh input/c-wire_v25.dat hvb comp 
+ ./c-wire.sh input/c-wire_v25.dat hva comp 
+ ./c-wire.sh input/c-wire_v25.dat lv all
+7.Les fichiers seront disponibles dans le répertoires tmp.
 Description des arguments :
 FICHIER : Nom du fichier .dat contenant les données.
 STATION :
@@ -57,46 +39,11 @@ CONSOMMATEUR :
 comp : Entreprises
 indiv : Particuliers
 all : Particuliers et Entreprises
-ID_CENTRALE : Identifiant optionnel d'une centrale (0 < x < n).
 Options :
+ID_CENTRALE : Identifiant optionnel d'une centrale (0 < x < n).
 -h : Affiche un message d'aide et arrête l'exécution.
-Exemple d'utilisation :
-bash
-Copier le code
-./script.sh data.dat lv all
 
-Fonctionnalités Principales
-Insertion dans l'arbre AVL :
-Les données sont insérées avec des rotations pour équilibrer l'arbre.
-Gestion des doublons : les capacités et consommations sont additionnées.
-Parcours infixe :
-Les données sont affichées dans l'ordre croissant d'identifiants.
-Exportation :
-Les données AVL peuvent être sauvegardées dans un fichier CSV pour une analyse ultérieure.
-Script Bash :
-Automatise le traitement des fichiers d'entrée et gère les restrictions spécifiques (par exemple, certaines combinaisons STATION/CONSOMMATEUR sont interdites).
-Tests et Exemples
-Test de base
-Créer un fichier d'entrée data.dat avec le contenu suivant :
-Copier le code
-1;500;300
-2;600;400
-3;400;200
 
-Compiler et exécuter :
-bash
-Copier le code
-make
-./exec < data.dat
 
-Automatisation avec le script Bash
-bash
-Copier le code
-./script.sh data.dat lv comp
 
-Nettoyage
-Pour nettoyer les fichiers générés (exécutables, fichiers objets, etc.) :
-bash
-Copier le code
-make clean
 
