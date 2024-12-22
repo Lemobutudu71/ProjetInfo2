@@ -1,6 +1,7 @@
-
 #include "AVL.h"
 
+
+// Fonction pour créer un noeud d'arbre AVL avec des valeurs initiales
 AVL *creerAVL( int identifiant, long capacite, long consommation){
     AVL *a = (AVL*)malloc(sizeof(AVL));
     if( a == NULL){
@@ -16,6 +17,7 @@ AVL *creerAVL( int identifiant, long capacite, long consommation){
     return a;
 }
 
+// Fonction pour calculer le minimum
 int min (int a, int b, int c){
     int min = a;
     if( b < min){
@@ -27,6 +29,7 @@ int min (int a, int b, int c){
     return min;
 }
 
+// Fonction pour calculer le maximum
 int max( int a, int b, int c){
     int max = a;
     if( b > max){
@@ -38,6 +41,8 @@ int max( int a, int b, int c){
     return max;
 }
 
+
+// Rotation gauche pour équilibrer l'arbre
 AVL *rotationGauche(AVL *a){
     if( a == NULL){
         return NULL;
@@ -45,49 +50,53 @@ AVL *rotationGauche(AVL *a){
     AVL *pivot = a->droit;
     a->droit = pivot->gauche;
     pivot->gauche = a;
+    // Mise à jour des facteurs d'équilibre
     int eqA = a->equilibre;
     int eqB = pivot->equilibre;
     a->equilibre = eqA - max(eqB, 0, 0) - 1;
     pivot->equilibre = min( (eqA -2), (eqA + eqB -2), (eqB -1));
-    return pivot;
+    return pivot;// Retourne le nouveau sous-arbre équilibré
 }
 
-AVL *rotationDroite(AVL *a){//changement 
+
+// Rotation droite pour équilibrer l'arbre
+AVL *rotationDroite(AVL *a){
     if( a == NULL){
         return NULL;
     }
     AVL *pivot = a->gauche;
     a->gauche = pivot->droit;
     pivot->droit = a;
+    // Mise à jour des facteurs d'équilibre
     int eqA = a->equilibre;
     int eqB = pivot->equilibre;
     a->equilibre = eqA - min(eqB, 0, 0) + 1;
     pivot->equilibre = max( (eqA + 2), (eqA + eqB + 2), (eqB + 1));
-    return pivot;
+    return pivot;// Retourne le nouveau sous-arbre équilibré
 }
 
+// Double rotation gauche
 AVL *doubleRotationGauche(AVL *a){
     a->droit = rotationDroite(a->droit);
     a = rotationGauche(a);
     return a;
 }
 
+// Double rotation droite
 AVL *doubleRotationDroite(AVL *a){
     a->gauche = rotationGauche(a->gauche);
     a = rotationDroite(a);
     return a;
 }
 
+// Choix de la rotation appropriée selon le facteur d'équilibre
 AVL * Choixrotation( AVL *a){
 	if( a == NULL){
 		printf("Erreur\n");
 		return ;
 	}
-	if( a == NULL){
-		printf("Erreur\n");
-		return ;
-	}
     if( a->equilibre >= 2){
+	    // Si le facteur d'équilibre est >= 2, on décide entre une rotation simple ou double
         if( a->equilibre >= 0){
             return rotationGauche(a);
         }
@@ -96,6 +105,7 @@ AVL * Choixrotation( AVL *a){
         }
     }
     if( a->equilibre <= -2){
+	      // Si le facteur d'équilibre est <= -2, on décide entre une rotation simple ou double
         if(a->equilibre <= 0){
             return rotationDroite(a);
         }
@@ -107,8 +117,7 @@ AVL * Choixrotation( AVL *a){
 }
 
 
-
-
+// Insertion dans l'arbre AVL avec gestion de l'équilibre
 AVL *InsertAvl( AVL *a, int identifiant, long capacite, long consommation , int *h){
     if( a == NULL){
         *h = 1; 
@@ -142,7 +151,7 @@ AVL *InsertAvl( AVL *a, int identifiant, long capacite, long consommation , int 
 }
 
 
-
+// Parcours infixe pour afficher les valeurs de l'arbre dans l'ordre croissant
 void Parcoursinfixe(AVL *a){
     if( a != NULL){
         Parcoursinfixe(a->gauche);
@@ -152,7 +161,8 @@ void Parcoursinfixe(AVL *a){
     }
 }
 
-// Fonction récursive pour exporter un noeud de l'AVL dans un fichier
+
+// Fonction récursive pour sauvegarder les noeuds de l'arbre dans un fichierr
 void AVLdansFichier(FILE *fichier, AVL *a) {
     if (a == NULL){
         return;
@@ -161,7 +171,8 @@ void AVLdansFichier(FILE *fichier, AVL *a) {
     fprintf(fichier,"%d:%ld:%ld\n", a->identifiant, a->capacite, a->consommation);     // Écrire les données du noeud actuel
     AVLdansFichier(fichier, a->droit);
 }
-// Fonction pour ouvrir un fichier et commencer l'export
+
+// Fonction pour ouvrir un fichier et sauvegarder un AVL
 void sauvegarderNoeudAVLDansFichier(const char *nomFichier, AVL *a) {
     FILE *fichier = fopen(nomFichier, "w");  // Ouvrir le fichier en mode écriture
     if (fichier == NULL) {
@@ -169,14 +180,13 @@ void sauvegarderNoeudAVLDansFichier(const char *nomFichier, AVL *a) {
         return;
     }
 	fprintf(fichier, "Station:Capacité:Consommation\n");
-	fprintf(fichier, "Station:Capacité:Consommation\n");
     // Appeler la fonction récursive pour exporter les données
     AVLdansFichier(fichier, a);
     // Fermer le fichier
     fclose(fichier);
 }
 
-
+// Libération de la mémoire utilisée par l'arbre AVL
 AVL *freeAVL(AVL *a){
     if(a == NULL){
         return a;
