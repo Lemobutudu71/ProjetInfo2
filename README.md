@@ -8,7 +8,7 @@ Structure du Projet
 - `AVL.c` : Implémente les fonctions pour manipuler l'arbre AVL (insertion, rotations, parcours, exportation).
 - `main.c` : Point d'entrée principal du programme pour lire les données d'entrée, insérer les nœuds dans l'AVL et afficher/exporter les résultats.
 - `Makefile` : Facilite la compilation du programme.
-- `script.sh` : Automatisation pour traiter des fichiers CSV et intégrer l'exécutable.
+- `c-wire.sh` : Script shell pour traiter le fichiers CSV et intégrer l'exécutable.
 
 
 Prérequis
@@ -19,6 +19,9 @@ Assurez-vous que les éléments suivants sont installés sur votre système :
 - `make` (outil de build)
 - Bash (pour exécuter le script shell)
 
+Utilisation du programme
+Une fois le fichier ProjetInfo2 téléchargé, vous devez placer le fichier c-wire_v25.dat dans le dossier input.
+Si 
 
 Compilation
 
